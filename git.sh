@@ -1,0 +1,1 @@
+See https://github.com/mbianchidev/git-aliases/blob/main/git-notes.md
