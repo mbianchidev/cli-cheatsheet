@@ -58,7 +58,7 @@ If kube  doesn't work
 > delete cache in .aws .kube folders
 direnv allow .
 
-k logs --since=1h --tail=1000000000 -l 'component in (backend)' -c gosigndike-gosignmm-svts-platform-gosign |grep "ERROR" -A 100 |pbcopy
+k logs --since=1h --tail=1000000000 -l 'component in (backend)' -c evil-productmm-svts-platform-evil-product |grep "ERROR" -A 100 |pbcopy
 
 k logs --since=1h --tail=1000000000: log di 1h e tail di X righe
 -l component in (backend): describe pod => label component ='quello che cerchi' => 
@@ -73,13 +73,13 @@ AWS distribution è amazon linux che è RedHat CentOS
 yum install tar
 
 #Download dal pod (dal pod?)
-k cp gosigndike-gosignmm-svts-platform-namespace/responder-596f67bd7c-2vgj7:/opt/gosign/conf/Aspose.Total.Java.lic /home/mbianchi/logs/Aspose.lic
+k cp evil-productmm-svts-platform-namespace/responder-596f67bd7c-2vgj7:/opt/evil-product/conf/Aspose.Total.Java.lic /home/username/logs/Aspose.lic
 
 #Upload sul pod (dal tuo terminale zsh)
-k cp /mnt/c/Users/mbian/Downloads/<file> <namespace>/<POD-name>:/opt/gosign/conf/<file>
+k cp /mnt/c/Users/mbian/Downloads/<file> <namespace>/<POD-name>:/opt/evil-product/conf/<file>
 
 es:
-k cp /home/mbianchi/logs/Aspose.lic gosigndike-gosignmm-svts-platform-namespace/responder-596f67bd7c-2vgj7:/opt/gosign/conf/Aspose.Total.Java.lic
+k cp /home/username/logs/Aspose.lic evil-productmm-svts-platform-namespace/responder-596f67bd7c-2vgj7:/opt/evil-product/conf/Aspose.Total.Java.lic
 
 
 ### KUBE ADM ###
