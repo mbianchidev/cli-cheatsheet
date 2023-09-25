@@ -5,6 +5,9 @@
 variable "init" {
   description = "Initialization of the repository"
   default = "terraform init"
+  parameters = {
+    -migrate-state = "Migrate the state file from one backend to another"
+  }
 }
 
 variable "plan" {
@@ -12,12 +15,18 @@ variable "plan" {
   default = "terraform plan"
   parameters = {
       -var-file = "variables.tfvars", # Load variables from a file
+      -o = "out.plan", # Write the plan to a file
   }
 }
 
 variable "apply" {
   description = "Apply the changes"
   default = "terraform apply"
+}
+
+variable "force-unlock" {
+  description = "Force unlock the state file"
+  default = "terraform force-unlock"
 }
 
 variable "destroy" {
