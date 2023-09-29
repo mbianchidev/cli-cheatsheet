@@ -10,6 +10,6 @@ Some of the files are incomplete and most of them contain italian comments, I wi
 [git](git.sh)
 [Docker](docker.sh)
 [Kubernetes and Helm](kubernetes.sh)
-[Terraform](terraform.tf)
+[Terraform](/Terraform/terraform.tf)
 [AWS](aws.sh)
 [Maven](maven.sh)
