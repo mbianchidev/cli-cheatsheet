@@ -25,7 +25,6 @@ brew install copyfile
 brew install corepack
 brew install coreutils
 brew install direnv
-brew install dirhistory
 brew install docker
 brew install docker-completion
 brew install docker-compose
@@ -38,7 +37,6 @@ brew install gettext
 brew install git
 brew install git-extras
 brew install git-flow
-brew install git-prompt
 brew install gnu-sed
 brew install go
 brew install grep
@@ -97,6 +95,7 @@ brew install yq
 brew install zlib
 brew install zplug
 brew install zsh-autosuggestions
+brew install zsh-git-prompt
 brew install zsh-interactive-cd
 brew install zsh-syntax-highlighting
 brew install zstd
@@ -155,6 +154,10 @@ if [ ! -f ~/.zshrc ]; then
   echo 'zsh-interactive-cd' >> ~/.zshrc
   echo 'wd' >> ~/.zshrc
   echo ')' >> ~/.zshrc
+  
+  echo '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' >> ~/.zshrc
+
+  echo '' >> ~/.zshrc
 
   echo 'source $ZSH/oh-my-zsh.sh' >> ~/.zshrc
 fi
