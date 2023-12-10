@@ -101,6 +101,15 @@ brew install zsh-interactive-cd
 brew install zsh-syntax-highlighting
 brew install zstd
 
+# Install casks
+brew install --cask dbeaver-community
+brew install --cask visual-studio-code
+brew install --cask slack
+brew install --cask google-chrome
+brew install --cask spotify
+brew install --cask mattermost
+brew install --cask 1password
+
 brew cleanup
 
 # if there is no zshrc file
