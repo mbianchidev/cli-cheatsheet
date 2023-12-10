@@ -104,7 +104,7 @@ brew install --cask slack
 brew install --cask google-chrome
 brew install --cask spotify
 brew install --cask mattermost
-brew install --cask 1password
+brew install --cask bitwarden
 
 brew cleanup
 
