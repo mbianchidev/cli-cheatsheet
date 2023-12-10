@@ -73,9 +73,7 @@ brew install openssl@3
 brew install opentofu
 brew install pcre
 brew install pcre2
-brew install pip
 brew install pkg-config
-brew install pnpm
 brew install pycparser
 brew install pyenv
 brew install pylint
@@ -96,7 +94,6 @@ brew install zlib
 brew install zplug
 brew install zsh-autosuggestions
 brew install zsh-git-prompt
-brew install zsh-interactive-cd
 brew install zsh-syntax-highlighting
 brew install zstd
 
