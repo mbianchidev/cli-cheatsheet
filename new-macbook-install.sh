@@ -154,6 +154,8 @@ if [ ! -f ~/.zshrc ]; then
   echo 'zsh-interactive-cd' >> ~/.zshrc
   echo 'wd' >> ~/.zshrc
   echo ')' >> ~/.zshrc
+
+  echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' >> ~/.zshrc
   
   echo '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' >> ~/.zshrc
 
