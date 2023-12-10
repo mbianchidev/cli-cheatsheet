@@ -113,13 +113,19 @@ if [ ! -f ~/.zshrc ]; then
   # Install oh-my-zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+fi
+
+if [-f ~/.zshrc ]
   echo 'alias ll="ls -lha"' >> ~/.zshrc
   echo 'alias k="kubectl"' >> ~/.zshrc
+  echo '' >> ~/.zshrc
 
   echo 'export ZSH=$HOME/.oh-my-zsh' >> ~/.zshrc
   # Oh-my-zsh theme
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  echo '' >> ~/.zshrc
   echo 'ZSH_THEME="powerlevel10k/powerlevel10k"' >> ~/.zshrc
+  echo '' >> ~/.zshrc
   # Oh-my-zsh plugins
   echo 'plugins=(' >> ~/.zshrc
   echo 'aliases' >> ~/.zshrc
@@ -143,16 +149,18 @@ if [ ! -f ~/.zshrc ]; then
   echo 'kubectl' >> ~/.zshrc
   echo 'kubectx' >> ~/.zshrc
   echo 'kube-ps1' >> ~/.zshrc
-  echo 'zsh-autosuggestions' >> ~/.zshrc
-  echo 'zsh-syntax-highlighting' >> ~/.zshrc
   echo 'zsh-interactive-cd' >> ~/.zshrc
   echo 'wd' >> ~/.zshrc
   echo ')' >> ~/.zshrc
+  echo '' >> ~/.zshrc
 
   echo '[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh' >> ~/.zshrc
+  echo '' >> ~/.zshrc
   echo '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' >> ~/.zshrc
+  echo '' >> ~/.zshrc
 
   echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' >> ~/.zshrc
+  echo '' >> ~/.zshrc
   
   echo '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' >> ~/.zshrc
 
@@ -160,5 +168,3 @@ if [ ! -f ~/.zshrc ]; then
 
   echo 'source $ZSH/oh-my-zsh.sh' >> ~/.zshrc
 fi
-
-source ~/.zshrc
