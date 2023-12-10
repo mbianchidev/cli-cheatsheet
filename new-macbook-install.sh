@@ -20,8 +20,6 @@ brew install c-ares
 brew install ca-certificates
 brew install cffi
 brew install cmake
-brew install common-aliases
-brew install copyfile
 brew install corepack
 brew install coreutils
 brew install direnv
@@ -43,7 +41,6 @@ brew install grep
 brew install groonga
 brew install gzip
 brew install helm
-brew install history
 brew install htop
 brew install icu4c
 brew install jq
