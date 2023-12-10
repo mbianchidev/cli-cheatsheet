@@ -6,12 +6,19 @@ then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+brew update
+brew upgrade
+
 brew install autoconf
 brew install autojump
-brew install awscli
+brew install awk
 brew install aws-iam-authenticator
+brew install awscli
 brew install azure-cli
+brew install brotli
+brew install c-ares
 brew install ca-certificates
+brew install cffi
 brew install cmake
 brew install common-aliases
 brew install copyfile
@@ -20,48 +27,89 @@ brew install coreutils
 brew install direnv
 brew install dirhistory
 brew install docker
+brew install docker-completion
 brew install docker-compose
+brew install docutils
 brew install eksctl
 brew install fzf
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install
+brew install gettext
 brew install git
 brew install git-extras
 brew install git-flow
 brew install git-prompt
+brew install gnu-sed
 brew install go
+brew install grep
+brew install groonga
 brew install gzip
 brew install helm
 brew install history
+brew install htop
+brew install icu4c
+brew install jq
+brew install k9s
 brew install kubectl
-brew install kubectx
-brew install kube-ps1
+brew install kubernetes-cli
+brew install libidn2
+brew install libnghttp2
+brew install libunistring
+brew install libuv
+brew install lz4
+brew install m4
+brew install mariadb
+brew install mecab
+brew install mecab-ipadic
+brew install mpdecimal
+brew install msgpack
 brew install mysql-client
+brew install ncurses
+brew install node
 brew install npm
 brew install nvm
-brew install node
+brew install oniguruma
 brew install openjdk
 brew install openssl
-brew install pnpm
+brew install openssl@3
+brew install opentofu
+brew install pcre
+brew install pcre2
 brew install pip
-brew install python
+brew install pkg-config
+brew install pnpm
+brew install pycparser
 brew install pyenv
 brew install pylint
+brew install python
+brew install python-setuptools
+brew install python@3.11
+brew install python@3.12
+brew install readline
+brew install six
+brew install sqlite
 brew install tmux
+brew install unzip
 brew install webp
+brew install wget
+brew install xz
+brew install yq
 brew install zlib
 brew install zplug
 brew install zsh-autosuggestions
-brew install zsh-syntax-highlighting
 brew install zsh-interactive-cd
+brew install zsh-syntax-highlighting
+brew install zstd
 
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+brew cleanup
 
 # if there is no zshrc file
 if [ ! -f ~/.zshrc ]; then
   # Create .zshrc file
   touch ~/.zshrc
+
+  # Install oh-my-zsh
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   echo 'alias ll="ls -lha"' >> ~/.zshrc
   echo 'alias k="kubectl"' >> ~/.zshrc
@@ -102,5 +150,4 @@ if [ ! -f ~/.zshrc ]; then
   echo 'source $ZSH/oh-my-zsh.sh' >> ~/.zshrc
 fi
 
-
-
+source ~/.zshrc
