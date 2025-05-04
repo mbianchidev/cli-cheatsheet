@@ -14,11 +14,13 @@ kubectl explain deployment.metadata.name						=> spiega un singolo campo con inf
 
 vi deployment/configuration.yaml                    			=> modifica il file di configurazione del cluster
 
-kubectl create -f deployments/d-conf.yaml           			=> crea un cluster deployment basandosi su quanto scritto nel d-conf.yaml
-kubectl create -f services/s-conf.yaml              			=> crea un cluster service basandosi su quanto scritto nel s-conf.yaml
-
+export KUBECONFIG=/home/mbianchi/.kube/config        			=> setta la variabile d'ambiente per il config file
 kubectl config get-contexts                        			    => mostra tutti i context di configurazione
 kubectl config use-context <yourClusterName>                    => imposta il context di configurazione
+
+kubectl create -f deployments/d-conf.yaml           			=> crea un cluster deployment basandosi su quanto scritto nel d-conf.yaml
+kubectl create -f services/s-conf.yaml              			=> crea un cluster service basandosi su quanto scritto nel s-conf.yaml
+kubectl apply -f deployments/d-conf.yaml            			=> crea o aggiorna un cluster deployment basandosi su quanto scritto nel d-conf.yaml
 
 kubectl get <resource-type> <resource-name> -o yaml|json        => mostra un singolo oggetto in formato yaml oppure json
 
