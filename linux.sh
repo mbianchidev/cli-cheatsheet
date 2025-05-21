@@ -1,92 +1,92 @@
 # Official documentation is in every command just by typing it but "man" is usually handy https://man7.org/linux/man-pages/man1/man.1.html
 # Every distribution may use different tools, this cheatsheet is a porridge of CentOS, RHEL and Ubuntu commands.
 
-sudo -u $user $command						    -> esegue comando come super user (è necessaria la password per quell'utenza)
-sudo su 										-> entra come root
+sudo -u $user $command						    -> executes command as super user (password required for that user)
+sudo su 										-> enters as root
 
-cat /etc/issue									-> info macchina o motd
-cat /proc/cpuinfo								-> info CPU
-cat /proc/meminfo								-> info RAM
-sudo fdisk -l									-> info disk
-hdparm -i /dev/device 							-> info disk
+cat /etc/issue									-> machine info or motd
+cat /proc/cpuinfo								-> CPU info
+cat /proc/meminfo								-> RAM info
+sudo fdisk -l									-> disk info
+hdparm -i /dev/device 							-> disk info
 
-cat /etc/os-release								-> info OS macchina
-lsb_release -a							        -> info OS macchina
-hostnamectl							            -> info OS macchina
-less /etc/fstab									-> info Aree NAS
+cat /etc/os-release								-> machine OS info
+lsb_release -a							        -> machine OS info
+hostnamectl							            -> machine OS info
+less /etc/fstab									-> NAS Areas info
 
-whoami 											-> utente print
-id [user]										-> stampa info su user
-usermod -a -G [grpname1],{grpname2} [username]	-> aggiungo lo user al/ai gruppi specificati
-groups [username]								-> stampa i gruppi a cui appartiene lo user
-less /etc/passwd								-> lista utenti
+whoami 											-> prints current user
+id [user]										-> prints user info
+usermod -a -G [grpname1],{grpname2} [username]	-> adds user to specified group(s)
+groups [username]								-> prints groups the user belongs to
+less /etc/passwd								-> users list
 
-sudo vi /etc/pam.d/password-auth				-> settings dell'auth per gli utenti, vedi errore UID => 1000
-sudo less /var/log/messages						-> log del sistema operativo
--> fai df -h per sapere nome dei dischi "mapper" puoi ometterlo
-sudo vgdisplay									-> visualizza spazio libero da poter estendere
-sudo lvextend -r -L +1GB -A n /dev/vg00/opt     -> estende spazio partizione disponibile di 1GB per disco /dev/vg00/opt
-sudo lvreduce -r -L -5GB -A n /dev/vg00/var     -> rimuove spazio partizione disponibile di 5GB per disco /dev/vg00/var
-sudo xfs_growfs /dev/vg00/var 					-> estende il file sistem
-findmnt											-> dettaglio dischi
-vi /etc/fstab [remove flags]					-> modifica flag dischi
-mount -o remount /datadisks/disk1				-> mount e remount del disco
+sudo vi /etc/pam.d/password-auth				-> user auth settings, check for UID => 1000 error
+sudo less /var/log/messages						-> operating system logs
+-> run df -h to know disk names "mapper" can be omitted
+sudo vgdisplay									-> displays free space that can be extended
+sudo lvextend -r -L +1GB -A n /dev/vg00/opt     -> extends partition space by 1GB for disk /dev/vg00/opt
+sudo lvreduce -r -L -5GB -A n /dev/vg00/var     -> removes 5GB of partition space for disk /dev/vg00/var
+sudo xfs_growfs /dev/vg00/var 					-> extends the file system
+findmnt											-> disk details
+vi /etc/fstab [remove flags]					-> modify disk flags
+mount -o remount /datadisks/disk1				-> mount and remount disk
 
-df -h 											-> stampa lo spazio residuo delle varie partizioni											
-du -hs *									 	-> stampa occupazione in GB totale
-du -ha *									 	-> stampa occupazione in GB per cartella
-du -ach											-> somma dimensioni filez
+df -h 											-> prints free space on various partitions											
+du -hs *									 	-> prints total disk usage in GB
+du -ha *									 	-> prints disk usage in GB per folder
+du -ach											-> sums file sizes
 
-CTRL+C                                          -> interrompi esecuzione di un comando mentre è in corso
+CTRL+C                                          -> interrupts execution of a command while it's running
 
-CTRL+R + "deploy"                               -> reverse search nella history dei comandi eseguiti, in questo caso comandi che contengono la parola deploy
+CTRL+R + "deploy"                               -> reverse search in command history, in this case commands containing the word deploy
 
-cd [location] 									-> muoversi per andare alla location
-cd - 											-> location precedente
-pwd 											-> stampa la location corrente
+cd [location] 									-> move to specified location
+cd - 											-> previous location
+pwd 											-> print current location
 
 ln -s /path/to/file /path/to/symlink			-> symbolic link
 
-ls -la 											-> lista files con permessi e alcune caratteristiche
-ls -lha											-> lista files human readable
-ll 												-> lista files con permessi e alcune caratteristiche
-ls --sort=size -lha -r							-> sort size ordinato al contrario
-ls -d *[nome]*/									-> lista directory che matchano la wildcard
+ls -la 											-> list files with permissions and characteristics
+ls -lha											-> list files in human readable format
+ll 												-> list files with permissions and characteristics
+ls --sort=size -lha -r							-> sort by size in reverse order
+ls -d *[name]*/									-> list directories that match the wildcard
 
 ls -q -U | awk -F . '{print $NF}' | sort | uniq -c | awk '{print $2,$1}' | sort -k 2 -nr | less 
-	-> lista dei file senza nomi, pesi e permessi; printo la fine del file; riordino; conto le line unique; 
-		stampo nome e quantità dei files sorted-unique; riordino inversamente per la colonna 2 (numero) e stampo l'output
+	-> list files without names, size and permissions; print the end of the file; sort; count unique lines; 
+		print name and quantity of sorted-unique files; sort inversely by column 2 (number) and print output
 
-ps -ef | grep [nome processo] 					                            -> processi attivi che matchano quel nome, fornisce il PID
-ps -C [nome processo] --no-headers -o pmem | paste -sd+ | bc                -> cerca il processo e la sua occupazione, i risultati possono essere multipl
-ps -e -o pid,uname,pcpu,pmem,comm                                           -> processi elenco occupazione memoria
-ps -e -o pid,uname,pcpu,pmem,comm --sort=-pcpu,+pmem                        -> processi elenco occupazione memoria sorted
+ps -ef | grep [process name] 					                            -> active processes matching that name, provides PID
+ps -C [process name] --no-headers -o pmem | paste -sd+ | bc                 -> finds the process and its memory usage, results may be multiple
+ps -e -o pid,uname,pcpu,pmem,comm                                           -> processes memory usage list
+ps -e -o pid,uname,pcpu,pmem,comm --sort=-pcpu,+pmem                        -> sorted processes memory usage list
 
 sar 																		-> system monitoring, load average etc.
-netstat -nl																	-> porte in ascolto
+netstat -nl																	-> listening ports
 
 sudo lsof -i -P -n | grep LISTEN											->
 sudo netstat -tulpn | grep LISTEN
 sudo lsof -i:22 															-> ## see a specific port such as 22 ##
 sudo nmap -sTU -O IP-address-Here
 
-yum search [pkg]		-> info su pkg disponibili che matchano il nome
-yum info [pkg]			-> info su pkg versione 
-yum list installed		-> lista i pacchetti yum installati
+yum search [pkg]		-> info on available packages matching the name
+yum info [pkg]			-> info on package version 
+yum list installed		-> lists installed yum packages
 
-watch -n 1 'ps -e -o pid,uname,cmd,pmem,pcpu --sort=-pmem,-pcpu | head -15' -> task manager da ricchi
-free -m 																	-> memoria RAM libera 
-cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l					-> numero CORE
-kill [PID] 																	-> uccide un processo attivo
+watch -n 1 'ps -e -o pid,uname,cmd,pmem,pcpu --sort=-pmem,-pcpu | head -15' -> fancy task manager
+free -m 																	-> free RAM memory 
+cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l					-> number of CORES
+kill [PID] 																	-> kills an active process
 
-mv [file] [location] 							-> muove un file dalla directory corrente ad una directory destinazione
-mv [old filename] [new filename] 				-> rinomina un file
-mv -R [location] [location] 					-> muove una directory e tutte le sottodirectory e files sotto un'altra directory
-mv (-R) [location] [location] 					-> muove una directory vuota da una directory all'altra
-mv -R [location] [location]						-> muove una directory piena ed i file contenuti in essa
-mv * ..\ 										-> muoviamo tutti i file (e directory) da dentro la directory a fuori	
+mv [file] [location] 							-> moves a file from current directory to destination directory
+mv [old filename] [new filename] 				-> renames a file
+mv -R [location] [location] 					-> moves a directory and all subdirectories and files to another directory
+mv (-R) [location] [location] 					-> moves an empty directory from one directory to another
+mv -R [location] [location]						-> moves a full directory and its contents
+mv * ..\ 										-> moves all files (and directories) from inside the directory to outside	
 
-scp [file] [user target machine]@[IP target machine]:[directory target machine] -> trasferisce via SCP da una macchina linux all'altra, chiede password dello user target
+scp [file] [user target machine]@[IP target machine]:[directory target machine] -> transfers via SCP from one linux machine to another, asks for target user password
 
 --------------
 -- tabella swap --
@@ -108,7 +108,7 @@ scp [file] [user target machine]@[IP target machine]:[directory target machine] 
      64      8               72                 128
     128     11              139                 256
 	
- In caso di heavy use della swap bisogna usare il x2 come regola oppure x1.75
+ In case of heavy swap usage, use x2 as rule or x1.75
  
  https://askubuntu.com/questions/49109/i-have-16gb-ram-do-i-need-32gb-swap
  
@@ -130,33 +130,33 @@ https://www.cyberciti.biz/faq/linux-increase-the-maximum-number-of-open-files/
 
 sysctl -w fs.file-max=100000
 vi /etc/sysctl.conf
-# modificare il file come segue => fs.file-max = 100000
+# modify the file as follows => fs.file-max = 100000
 sysctl -p
 /etc/pam.d/login = add => session required pam_limits.so
 --------------
 
-cp -R [location] [location] 					-> copia una directory ed i file contenuti in essa in un'altra directory
-cp [file] [location] 							-> copia un file in una directory
+cp -R [location] [location] 					-> copies a directory and its contents to another directory
+cp [file] [location] 							-> copies a file to a directory
 
-zip -r [nome].zip [directory] 					-> zippa la directory e il contenuto
-zip [nome].zip [file] 							-> zippa il file
-unzip [file.zip] -d [directory] 				-> unzippa il file [nella directory]
-gzip [filename]									-> zippa il file in .gz
-zless [file.zip o file.gz]						-> less di un file zippato
-zcat [file.zip o file.gz]
+zip -r [name].zip [directory] 					-> zips the directory and its content
+zip [name].zip [file] 							-> zips the file
+unzip [file.zip] -d [directory] 				-> unzips the file [in directory]
+gzip [filename]									-> zips the file in .gz format
+zless [file.zip or file.gz]						-> less of a zipped file
+zcat [file.zip or file.gz]
 
-tar -zxvf yourfile.tar.gz 						-> estrae il file nella directory corrente
+tar -zxvf yourfile.tar.gz 						-> extracts the file in current directory
 
-find /folder/*.log* -type f -not -name "*.gz" -mtime +[days] -exec gzip {} \; 			-> zippa i file *.log* più vecchi di N giorni
-find /var/opt/evil-product/logs/*.log* -type f -mtime +30 -exec rm -f {} \; 					-> elimina i file log più vecchi di N giorni
+find /folder/*.log* -type f -not -name "*.gz" -mtime +[days] -exec gzip {} \; 			-> zips *.log* files older than N days
+find /var/opt/evil-product/logs/*.log* -type f -mtime +30 -exec rm -f {} \; 					-> deletes log files older than 30 days
 
-find /opt/more-evil-corp/compac-connector/*.gz* -type f -mtime +40 -exec rm -f {} \; 		-> elimina i file gz più vecchi di 40 giorni
+find /opt/more-evil-corp/compac-connector/*.gz* -type f -mtime +40 -exec rm -f {} \; 		-> deletes gz files older than 40 days
 
-chmod -[1-7][1-7][1-7] [file/directory] 		-> permessi ai vari gruppi 7 = tutti i permessi, 1=read only
-chmod -[x,r,w] [file/directory] 				-> toglie permessi di esecuzione, lettura e scrittura all'utente corrente
-chmod +[x,r,w] [file/directory] 				-> aggiunge esecuzione, lettura e scrittura all'utente corrente
-chmod g+/-[x,r,w] [file/directory] 				-> aggiunge esecuzione, lettura e scrittura al gruppo corrente
-chmod u=rwx,g=rx,o=r [file/directory]			-> permessi dati in maniera umana
+chmod -[1-7][1-7][1-7] [file/directory] 		-> permissions for various groups 7 = all permissions, 1=read only
+chmod -[x,r,w] [file/directory] 				-> removes execution, reading and writing permissions from current user
+chmod +[x,r,w] [file/directory] 				-> adds execution, reading and writing permissions to current user
+chmod g+/-[x,r,w] [file/directory] 				-> adds execution, reading and writing permissions to current group
+chmod u=rwx,g=rx,o=r [file/directory]			-> permissions given in a human-readable way
 
 --- chmod table ---
 
@@ -177,74 +177,74 @@ chmod u=rwx,g=rx,o=r [file/directory]			-> permessi dati in maniera umana
 
 --- chmod table --- 
 
-chgrp [nome gruppo] [file/directory] 			-> cambia la proprietà gruppo di una cartella o di un file
+chgrp [group name] [file/directory] 			-> changes group ownership of a folder or file
 
 chown [owner]:[group] [file/directory]	
-chown devops:webgrp [file/directory] 			-> setta nuovo owner per il file in questo caso owner = "devops" group = "webgrp"	
+chown devops:webgrp [file/directory] 			-> sets new owner for the file, in this case owner = "devops" group = "webgrp"	
 
-rm (-f) [file] 									-> cancella un file
-rm (-d) [directory] 							-> cancella una directory vuota
-rm -f *.pdf 									-> cancella tutti i file .pdf (applicabile a tutte le estensioni/nomi file)
-rm -rf											-> cancella forzatamente una cartella ed il suo contenuto
-rm -r 											-> cancella una cartella ed il suo contenuto
-find . -type f -name '*.pdf' -exec rm {} +		-> rimuovi tutti i file PDF dalla folder corrente (e dalle subfolder)
+rm (-f) [file] 									-> deletes a file
+rm (-d) [directory] 							-> deletes an empty directory
+rm -f *.pdf 									-> deletes all .pdf files (applicable to all extensions/file names)
+rm -rf											-> forcibly deletes a folder and its contents
+rm -r 											-> deletes a folder and its contents
+find . -type f -name '*.pdf' -exec rm {} +		-> removes all PDF files from current folder (and subfolders)
 
 find . -maxdepth 1 -name "*.pdf" -print0 | xargs -0 rm -> 
 
-less [document]									-> visual documento
+less [document]									-> view document
 
-	> 		-> vai in fondo al documento
-	? 		-> cerca dal basso verso l'alto
-	/ 		-> cerca dall'altro verso il basso
+	> 		-> go to end of document
+	? 		-> search from bottom to top
+	/ 		-> search from top to bottom
 	
-vi [document] 									-> editor documento (i comandi di less funzionano)
+vi [document] 									-> document editor (less commands work)
 
-	esc 		-> entra in modalità visual
-	:w 			-> salva
-	:q 			-> esci
-	:q! 		-> esci senza salvare
-	:wq 		-> esci e salva
-	i 			-> entra in modalità insert
-	A 			-> entra in append
-	GG			-> vai alla fine
-	gg			-> vai all'inizio
-	dd 			-> cancella riga
-	ZZ 			-> esci e salva
-	[numero] DD -> elimina N righe
+	esc 		-> enter visual mode
+	:w 			-> save
+	:q 			-> exit
+	:q! 		-> exit without saving
+	:wq 		-> exit and save
+	i 			-> enter insert mode
+	A 			-> enter append mode
+	GG			-> go to end
+	gg			-> go to beginning
+	dd 			-> delete line
+	ZZ 			-> exit and save
+	[number] DD -> delete N lines
 
 
-cat [document] 																								-> visual documento
-zcat [document]																								-> visual documento zippato
+cat [document] 																								-> view document
+zcat [document]																								-> view zipped document
 
-tail -f [document] 																							-> apri in append e rimani in append utile per i log in real time
+tail -f [document] 																							-> open in append and stay in append, useful for real-time logs
 
-touch [params: -m modified at -a accessed_at -t created_at] [timestamp format yyyymmddhhmmss.tt] [filename] -> modifica accesso file
-es:
+touch [params: -m modified at -a accessed_at -t created_at] [timestamp format yyyymmddhhmmss.tt] [filename] -> modify file access
+example:
 touch -m -a -t 202106141136.09 wow.txt
 
-./[nome_script].sh 								-> esegue i comandi contenuti nello script .sh
-java -jar [nome_jar].jar 						-> esegue il main contenuto nel .jar
+./[script_name].sh 								-> executes commands contained in .sh script
+java -jar [jar_name].jar 						-> executes the main in the .jar
 
-wget [link di dropbox] 							-> scarica una risorsa nella cartella 
+wget [dropbox link] 							-> downloads a resource to the folder 
 
-locate 												-> trova file
-find . -name *nomefile*.txt* 						-> trova file formato txt, txtx etc. che hanno all'interno del nome la parola nomefile all'interno della cartella corrente + subfolders prova ad usare prima il comando cd / in modo da cercare in tutto il pc
-find . -type f -print | grep -i "nome o .formato"	-> trova il file in maniera molto intelligente a partire dalla cartella, ti stampa anche la location ed il match colorato
+locate 												-> find file
+find . -name *filename*.txt* 						-> finds files in txt, txtx etc. format that have the word filename in their name within the current folder + subfolders, try to use the cd / command first to search the entire PC
+find . -type f -print | grep -i "name or .format"	-> finds the file intelligently starting from the folder, also prints the location and colored match
 
-grep -Ril "[testo]" [directory] 				-> cerca un testo all'interno dei file, usare directory / per cercare in tutto il PC
+grep -Ril "[text]" [directory] 				-> searches for text inside files, use directory / to search the entire PC
 
-grep "parola o frase" [dir]/*.[file ext]        -> cerca una parola o frase CASE SENSITIVE in una cartella 
+grep "word or phrase" [dir]/*.[file ext]        -> searches for CASE SENSITIVE word or phrase in a folder 
 
-grep -i "parola o frase" [dir]/*.[file ext]     -> cerca una parola o frase CASE INSENSITIVE in una cartella 
+grep -i "word or phrase" [dir]/*.[file ext]     -> searches for CASE INSENSITIVE word or phrase in a folder 
 
-ps -ef | grep --color=auto [word]				-> colora la parola
+ps -ef | grep --color=auto [word]				-> colors the word
 
-zgrep "parola o frase" [dir]/[file zippato]     -> cerca una parola o frase CASE SENSITIVE in file zippato (anche cartella di file zippati)
+zgrep "word or phrase" [dir]/[zipped file]     -> searches for CASE SENSITIVE word or phrase in zipped file (also folder of zipped files)
 
 
 --- Time ---
-date                                            -> fornisce la data attuale
-sudo hwclock -s									-> riallinea data di un sottosistema/VM o del computer stesso con il clock
+date                                            -> provides current date
+sudo hwclock -s									-> realigns date of a subsystem/VM or the computer itself with the clock
 
 
 #######################################################################################
@@ -253,7 +253,7 @@ sudo hwclock -s									-> riallinea data di un sottosistema/VM o del computer s
 
 --- GET ---
 
-curl -v http://localhost:8080/gosing/loginc 										-> curl verbose fa chiamata http GET come se fosse browser 
+curl -v http://localhost:8080/gosing/loginc 										-> curl verbose makes http GET call as if it were a browser 
 curl -H "Accept: application/xml" -H "Content-Type: application/xml" -X GET <url>	-> curl get xml
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X GET <url> -> curl get json
 
@@ -270,32 +270,32 @@ For logging into a site (auth):
 curl -d "username=admin&password=admin&submit=Login" --dump-header headers http://localhost/Login
 curl -L -b headers http://localhost/
 
-eytool -list -keystore file.p12  															-> stampa le info di un p12 di cui hai la psw
-keytool -v -list -keystore file.p12  														-> stampa tutte le info (verbose)
-openssl pkcs12 -in <certificato>.p12 -out certificate.pem -nodes 							-> estrai certificato [chiede la password]
-cat certificate.pem | openssl x509 -noout -enddate 											-> controlla data scadenza
-keytool -list -v -keystore cacerts > /tmp/keyStore.txt 										-> estrai le info del certificato in un file [chiede la password]
-keytool -importcert -file /location/file.cer -keystore cacerts -alias <alias arbitrario>	-> import certificato
+eytool -list -keystore file.p12  															-> prints info of a p12 for which you have the password
+keytool -v -list -keystore file.p12  														-> prints all info (verbose)
+openssl pkcs12 -in <certificate>.p12 -out certificate.pem -nodes 							-> extracts certificate [asks for password]
+cat certificate.pem | openssl x509 -noout -enddate 											-> checks expiration date
+keytool -list -v -keystore cacerts > /tmp/keyStore.txt 										-> extracts certificate info to a file [asks for password]
+keytool -importcert -file /location/file.cer -keystore cacerts -alias <arbitrary alias>	-> import certificate
 
 input password: changeit
- -> default psw del default keystore java
+ -> default password of default java keystore
  
 netsh http add sslcert ipport=0.0.0.0:443 certhash='<inserire hash>' appid='{<inserire-app-id>}' => import cert SSL iis, da testare
 
 
-openssl req –new –newkey rsa:2048 –nodes –keyout server.key –out server.csr -> crea una richiesta per il certificato SSL dalla macchina FE (fornire server.csr)
+openssl req –new –newkey rsa:2048 –nodes –keyout server.key –out server.csr -> creates a request for SSL certificate from FE machine (provide server.csr)
 
-openssl genrsa -out private.pem 2048														-> Chiave privata
-openssl rsa -in private.pem -outform PEM -pubout -out public.pem							-> Chiave pubblica
+openssl genrsa -out private.pem 2048														-> Private key
+openssl rsa -in private.pem -outform PEM -pubout -out public.pem							-> Public key
 openssl req -new -key private.pem -out certificate.csr										-> CSR (Certificate Signing Request)
-openssl x509 -req -days 365 -in certificate.csr -signkey private.pem -out certificate.crt	-> Certificato self-signed
+openssl x509 -req -days 365 -in certificate.csr -signkey private.pem -out certificate.crt	-> Self-signed certificate
 
-openssl x509 -in certificate.crt -out certificate.pem -outform PEM							-> Conversione cert in PEM
-openssl x509 -outform der -in grapho.pem -out grapho.crt									-> Conversione PEM in CRT
+openssl x509 -in certificate.crt -out certificate.pem -outform PEM							-> Convert cert to PEM
+openssl x509 -outform der -in grapho.pem -out grapho.crt									-> Convert PEM to CRT
 
 
-openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt      -> Generazione PFX
-openssl pkcs12 -in certificate.pfx -nocerts -out private.key							-> Ottenimento pvt.key da PFX
+openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt      -> Generate PFX
+openssl pkcs12 -in certificate.pfx -nocerts -out private.key							-> Get pvt.key from PFX
 
 -- adding cert to std java keystore
 
@@ -318,13 +318,13 @@ keytool -importkeystore -srckeystore testkeystore.p12 -srcstoretype pkcs12 -dest
 
 
 .P12
-- generare nuovo p12 con certificato finale + chiave privata
+- generate new p12 with final certificate + private key
  sudo openssl pkcs12 -export -inkey ip1cvliaslbs001.clint.evilcorp.it.key -in 20210322.ip1cvliaslbs001.clint.evilcorp.it.cer -name ip1cvliaslbs001.clint.evilcorp.it -out more-evil-corpcollaudo_20210322.p12
 
 Enter Export Password:
 Verifying - Enter Export Password: MT4SxvuJ9Y
-- export intermediate e root ca da certificato finale (anche da windows)
-- import nel p12 della root e intermediate
+- export intermediate and root ca from final certificate (also from windows)
+- import root and intermediate into p12
 
  sudo /usr/java/jdk1.8.0_161/bin/keytool -import -alias intermediate-globalsign-rsa-ov-ssl-ca-2018 -file GlobalSign_RSA_OV_SSL_CA_2018.cer -keystore more-evil-corpcollaudo_20210322.p12 
  sudo /usr/java/jdk1.8.0_161/bin/keytool -import -alias root-globalsign-ca-r3 -file GlobalSignRootCA_R3.cer -keystore more-evil-corpcollaudo_20210322.p12 
@@ -332,17 +332,17 @@ Verifying - Enter Export Password: MT4SxvuJ9Y
 Enter keystore password:  
 
 .JKS
--	Verificare la presenza delle RootCA tramite serialnumber (togliendo lo zero iniziale 04000000000121585308a2) se presente procedere
--	Eliminare vecchio certificato finale della macchina
+-	Verify presence of RootCA via serialnumber (removing the initial zero 04000000000121585308a2) if present proceed
+-	Delete old final certificate of the machine
 
 sudo /usr/java/jdk1.8.0_161/bin/keytool -delete -alias ip1cvliaslbs001.clint.evilcorp.it -keystore 
 
--	Import del nuovo certificato finale della macchina
+-	Import new final certificate of the machine
  sudo /usr/java/jdk1.8.0_161/bin/keytool -import -alias ip1cvliaslbs001.clint.evilcorp.it -file 20210322.ip1cvliaslbs001.clint.evilcorp.it.cer -keystore cacerts_custom_coll_20210322_P12.jks
 
 
 
-.CSR con SAN multipli
+.CSR with multiple SANs
 
 $ openssl req -new -out server.csr -newkey rsa:2048 -nodes -sha256 -keyout private.key.temp -config openssl.cnf
 $ openssl req -text -noout -verify -in server.csr
@@ -358,17 +358,17 @@ prompt = no
 C = IT
 ST = IT
 L = Milan
-O = D-Share S.p.A.
+O = xxxx
 OU = DevOps
-CN = api-dshare.rcs.it
+CN = xxxx.yyyy.it
 [v3_req]
 keyUsage = keyEncipherment, dataEncipherment, digitalSignature, nonRepudiation
 extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = api-dshare.rcs.it
-DNS.2 = atomos-dshare.rcs.it
-DNS.3 = deploy-dshare.rcs.it
+DNS.1 = xxx.yyyy.it
+DNS.2 = yyyy.yyyy.it
+DNS.3 = zzz.yyyy.it
 
 
 
@@ -394,32 +394,32 @@ awk '{print "ABC"$0"DEF"}' TKT_59984-ID.txt | head
 --- GREP & ZGREP MAGIC ---
 --------------------------
 
-zgrep -c "phrase to search for" [nome file o cartella/*.ext] 																					-> conta occorrenze
+zgrep -c "phrase to search for" [file name or folder/*.ext] 																					-> counts occurrences
 
-zgrep -A [numero righe prima] -B [numero righe dopo] "phrase to search for" [nome file o espressione regolare *.log] > [file to redirect out] 	-> crea file con porzioni di log che ti scegli signò
+zgrep -A [number of lines before] -B [number of lines after] "phrase to search for" [file name or regular expression *.log] > [file to redirect out] 	-> creates file with portions of log that you choose
 
 zgrep "ParamName:inIFrame" signbook.log.2019-05-* | grep CE800960 
 
-grep -c "phrase to search for" signbook.log.2019-0?-?? 																							-> conta occorrenze
+grep -c "phrase to search for" signbook.log.2019-0?-?? 																							-> counts occurrences
 
 ------------------
 --- MAGIC      ---
 ------------------
 
-watch tail [file]                                         				-> fa cose alla fine del file
+watch tail [file]                                         				-> does things at the end of the file
 
-watch "tail [file tipicamente di log]|cut -b 1-180 -n 25" 				-> ultime 25 righe del file, e continua a fare il tail ogni 2 secs
+watch "tail [typically log file]|cut -b 1-180 -n 25" 				-> last 25 lines of the file, and continues to tail every 2 secs
 
-watch -n [intervallo in secondi] [comando]                				-> ogni N secondi fa watch del comando
+watch -n [interval in seconds] [command]                				-> watches the command every N seconds
 
-cat [file] | tr -d ',' | awk '{print "\""$0"\","}' > [file nuovo] 		-> cancella virgole da file e con awk rende gli ID sqlizzabili
+cat [file] | tr -d ',' | awk '{print "\""$0"\","}' > [new file] 		-> removes commas from file and with awk makes the IDs SQL-compatible
 
 export LOG=evil-product.log ; ( for w in $(zgrep -Po '(it|eu)(\.[a-zA-Z][a-zA-Z0-9]+){2,10}' $LOG|sort|uniq) ; do echo $(zgrep -i $w $LOG | wc -c) "$w" ; do
 ne ) | sort -k 1 -n | tail -n 10
 
-=> legge le maggiori classi che loggano nel log e le elenca
+=> reads the major classes that log in the log and lists them
 
-sort [file]  | awk '!/^$/' | awk '!/^#/' > [result file] 	 			 -> elimina tutti i commenti e gli spazi vuoti da un file e ne stampa le righe
-																			in modo ordinato, utile per controllare properties
+sort [file]  | awk '!/^$/' | awk '!/^#/' > [result file] 	 			 -> removes all comments and empty spaces from a file and prints the lines
+																			in an orderly manner, useful for checking properties
 
-# https://medium.com/@joelbelton/the-most-important-linux-commands-that-nobody-teaches-you-ce423ef2ae28
+ https://medium.com/@joelbelton/the-most-important-linux-commands-that-nobody-teaches-you-ce423ef2ae28
