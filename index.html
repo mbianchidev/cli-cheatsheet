@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL//COMMANDS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Orbitron:wght@900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --phosphor: #39ff14;
+            --screen: #0d0208;
+            --amber: #ffba08;
+            --cyan: #00f5ff;
+            --purple: #b537f2;
+        }
+        
+        body {
+            background: #000;
+            color: var(--phosphor);
+            font-family: 'Cutive Mono', monospace;
+            overflow-x: hidden;
+        }
+        
+        /* CRT SCREEN EFFECT */
+        .monitor {
+            position: relative;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #000 100%);
+            min-height: 100vh;
+            padding: 3rem;
+        }
+        
+        .monitor::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanlines 8s linear infinite;
+        }
+        
+        .monitor::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+        
+        /* GLITCH TEXT */
+        .glitch-text {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            text-shadow: 0 0 10px var(--phosphor), 0 0 20px var(--phosphor);
+            animation: flicker 3s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            41%, 43% { opacity: 0.8; }
+            45%, 47% { opacity: 0.9; }
+        }
+        
+        /* TERMINAL HEADER */
+        .terminal-header {
+            border: 3px solid var(--phosphor);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(57, 255, 20, 0.1), 0 0 30px rgba(57, 255, 20, 0.2);
+        }
+        
+        .prompt-line {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: var(--phosphor);
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* COMMAND INTERFACE */
+        .interface-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .terminal-input {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+            padding: 1rem;
+            font-family: 'Cutive Mono', monospace;
+            font-size: 1rem;
+            box-shadow: inset 0 0 20px rgba(0, 245, 255, 0.1);
+            outline: none;
+        }
+        
+        .terminal-input:focus {
+            box-shadow: inset 0 0 20px rgba(0, 245, 255, 0.3), 0 0 20px rgba(0, 245, 255, 0.5);
+            border-color: var(--phosphor);
+        }
+        
+        .mode-switch {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--amber);
+            color: var(--amber);
+            padding: 1rem 1.5rem;
+            font-family: 'Cutive Mono', monospace;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .mode-switch:hover {
+            background: var(--amber);
+            color: #000;
+            box-shadow: 0 0 30px var(--amber);
+        }
+        
+        /* CATEGORY SELECTOR */
+        .selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .selector-btn {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--phosphor);
+            color: var(--phosphor);
+            padding: 1.2rem 1rem;
+            font-family: 'Cutive Mono', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .selector-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .selector-btn:hover::before {
+            left: 100%;
+        }
+        
+        .selector-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+        
+        .selector-btn.active-selector {
+            background: var(--purple);
+            border-color: var(--purple);
+            color: #fff;
+            box-shadow: 0 0 30px var(--purple);
+        }
+        
+        .selector-icon {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* COMMAND DISPLAY */
+        .command-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .cmd-block {
+            background: rgba(0, 0, 0, 0.8);
+            border-left: 4px solid var(--phosphor);
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .cmd-block:hover {
+            border-left-width: 8px;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .cmd-syntax {
+            font-size: 1.1rem;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            font-weight: bold;
+            word-break: break-all;
+            text-shadow: 0 0 5px rgba(0, 245, 255, 0.5);
+        }
+        
+        .cmd-explain {
+            color: var(--amber);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .cmd-action {
+            background: transparent;
+            border: 2px solid var(--phosphor);
+            color: var(--phosphor);
+            padding: 0.7rem 1.5rem;
+            font-family: 'Cutive Mono', monospace;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cmd-action::after {
+            content: '>';
+            position: absolute;
+            right: 1rem;
+            transition: transform 0.2s;
+        }
+        
+        .cmd-action:hover::after {
+            transform: translateX(5px);
+        }
+        
+        .cmd-action:hover {
+            background: var(--phosphor);
+            color: #000;
+            box-shadow: 0 0 20px var(--phosphor);
+        }
+        
+        .cmd-block.flash-copied {
+            animation: flashCopy 0.5s;
+        }
+        
+        @keyframes flashCopy {
+            0%, 100% { border-left-color: var(--phosphor); }
+            50% { border-left-color: var(--amber); box-shadow: 0 0 40px var(--amber); }
+        }
+        
+        /* STATS BAR */
+        .stats-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 2px solid var(--phosphor);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            z-index: 1000;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--amber);
+        }
+        
+        .stat-value {
+            color: var(--cyan);
+            font-weight: bold;
+        }
+        
+        /* EMPTY STATE */
+        .void-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--amber);
+        }
+        
+        .void-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .monitor { padding: 1.5rem; }
+            .terminal-header { padding: 1.5rem; }
+            .glitch-text { font-size: 2rem; }
+            .stats-bar { flex-direction: column; gap: 0.5rem; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="monitor">
+        <header class="terminal-header">
+            <h1 class="glitch-text">TERMINAL//COMMANDS</h1>
+            <div class="prompt-line">
+                <span style="color: var(--amber);">root@cli</span>
+                <span style="color: var(--cyan);">:</span>
+                <span style="color: var(--purple);">~/cheatsheet</span>
+                <span style="color: var(--phosphor);">$</span>
+                <span class="cursor"></span>
+            </div>
+        </header>
+
+        <section class="interface-controls">
+            <input 
+                type="text" 
+                class="terminal-input" 
+                id="queryField"
+                placeholder="[SEARCH COMMANDS...]"
+                spellcheck="false"
+            />
+            <button class="mode-switch" id="themeBtn">◐ MODE</button>
+        </section>
+
+        <nav class="selector-grid" id="categoryNav"></nav>
+
+        <main class="command-container" id="displayArea"></main>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-label">SYSTEM:</span>
+            <span class="stat-value" id="systemStatus">ONLINE</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">CATEGORY:</span>
+            <span class="stat-value" id="activeCategory">---</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">LOADED:</span>
+            <span class="stat-value" id="commandCount">0</span>
+        </div>
+    </div>
+
+    <script>
+        // SYSTEM CORE
+        const Terminal = {
+            registry: {},
+            currentView: null,
+            filterText: '',
+            isDarkMode: true,
+            
+            boot() {
+                this.loadRegistry();
+            },
+            
+            async loadRegistry() {
+                try {
+                    const response = await fetch('terminal-db.json');
+                    const payload = await response.json();
+                    this.registry = payload.systems;
+                    this.renderCategories();
+                    this.selectCategory(Object.keys(this.registry)[0]);
+                    this.wireInterface();
+                    document.getElementById('systemStatus').textContent = 'READY';
+                } catch(err) {
+                    console.error('FATAL:', err);
+                    document.getElementById('displayArea').innerHTML = 
+                        '<div class="void-state"><div class="void-icon">⚠</div><p>SYSTEM ERROR</p></div>';
+                    document.getElementById('systemStatus').textContent = 'ERROR';
+                }
+            },
+            
+            renderCategories() {
+                const navArea = document.getElementById('categoryNav');
+                navArea.innerHTML = Object.entries(this.registry).map(([key, data]) => `
+                    <button class="selector-btn" data-sys="${key}">
+                        <span class="selector-icon">${data.glyph}</span>
+                        <div>${data.name}</div>
+                    </button>
+                `).join('');
+            },
+            
+            selectCategory(sysKey) {
+                this.currentView = sysKey;
+                this.filterText = '';
+                document.getElementById('queryField').value = '';
+                
+                document.querySelectorAll('.selector-btn').forEach(btn => {
+                    btn.classList.toggle('active-selector', btn.dataset.sys === sysKey);
+                });
+                
+                document.getElementById('activeCategory').textContent = 
+                    this.registry[sysKey].name.toUpperCase();
+                
+                this.renderCommands();
+            },
+            
+            renderCommands() {
+                const system = this.registry[this.currentView];
+                let entries = system.entries;
+                
+                if (this.filterText) {
+                    const needle = this.filterText.toLowerCase();
+                    entries = entries.filter(([syntax, desc]) => 
+                        syntax.toLowerCase().includes(needle) || 
+                        desc.toLowerCase().includes(needle)
+                    );
+                }
+                
+                document.getElementById('commandCount').textContent = entries.length;
+                
+                const displayArea = document.getElementById('displayArea');
+                
+                if (entries.length === 0) {
+                    displayArea.innerHTML = `
+                        <div class="void-state">
+                            <div class="void-icon">∅</div>
+                            <p>NO MATCH: "${this.filterText}"</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                displayArea.innerHTML = entries.map(([syntax, desc], idx) => `
+                    <div class="cmd-block" data-idx="${idx}">
+                        <div class="cmd-syntax">${this.escapeMarkup(syntax)}</div>
+                        <div class="cmd-explain">${this.escapeMarkup(desc)}</div>
+                        <button class="cmd-action" onclick="Terminal.copyToClipboard('${this.escapeQuotes(syntax)}', this)">
+                            COPY TO BUFFER
+                        </button>
+                    </div>
+                `).join('');
+            },
+            
+            copyToClipboard(text, btnElement) {
+                const block = btnElement.closest('.cmd-block');
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    block.classList.add('flash-copied');
+                    btnElement.textContent = '✓ COPIED';
+                    
+                    setTimeout(() => {
+                        block.classList.remove('flash-copied');
+                        btnElement.textContent = 'COPY TO BUFFER';
+                    }, 1200);
+                }).catch(() => {
+                    btnElement.textContent = '✗ FAILED';
+                    setTimeout(() => {
+                        btnElement.textContent = 'COPY TO BUFFER';
+                    }, 1200);
+                });
+            },
+            
+            applyFilter(text) {
+                this.filterText = text;
+                this.renderCommands();
+            },
+            
+            toggleMode() {
+                this.isDarkMode = !this.isDarkMode;
+                const root = document.documentElement;
+                if (this.isDarkMode) {
+                    root.style.setProperty('--phosphor', '#39ff14');
+                    root.style.setProperty('--screen', '#0d0208');
+                } else {
+                    root.style.setProperty('--phosphor', '#00ff88');
+                    root.style.setProperty('--screen', '#1a1a2e');
+                }
+            },
+            
+            wireInterface() {
+                document.getElementById('themeBtn').addEventListener('click', () => {
+                    this.toggleMode();
+                });
+                
+                document.getElementById('queryField').addEventListener('input', (evt) => {
+                    this.applyFilter(evt.target.value);
+                });
+                
+                document.getElementById('categoryNav').addEventListener('click', (evt) => {
+                    const btn = evt.target.closest('.selector-btn');
+                    if (btn) {
+                        this.selectCategory(btn.dataset.sys);
+                    }
+                });
+                
+                document.addEventListener('keydown', (evt) => {
+                    if ((evt.ctrlKey || evt.metaKey) && evt.key === 'k') {
+                        evt.preventDefault();
+                        document.getElementById('queryField').focus();
+                    }
+                    
+                    if (evt.key === 'Escape') {
+                        document.getElementById('queryField').value = '';
+                        this.applyFilter('');
+                    }
+                });
+            },
+            
+            escapeMarkup(str) {
+                const temp = document.createElement('div');
+                temp.textContent = str;
+                return temp.innerHTML;
+            },
+            
+            escapeQuotes(str) {
+                return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            }
+        };
+        
+        // INITIALIZE
+        Terminal.boot();
+    </script>
+</body>
+</html>
